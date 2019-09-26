@@ -12,9 +12,12 @@ import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.annotation.LayoutRes
+import androidx.annotation.Nullable
+import androidx.databinding.DataBindingUtil
 
 
 import dagger.android.AndroidInjection
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
 
 
 abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel> : DaggerAppCompatActivity(),
@@ -55,15 +58,15 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel> : DaggerAppC
 
     }
 
-    fun onFragmentDetached(tag: String) {
+   override fun onFragmentDetached(tag: String) {
 
     }
 
-    protected fun attachBaseContext(newBase: Context) {
+    protected override fun attachBaseContext(newBase: Context) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase))
     }
 
-    protected fun onCreate(@Nullable savedInstanceState: Bundle) {
+    protected override fun onCreate(savedInstanceState: Bundle?) {
         performDependencyInjection()
         super.onCreate(savedInstanceState)
         performDataBinding()
@@ -116,7 +119,7 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel> : DaggerAppC
         viewDataBinding!!.executePendingBindings()
     }
 
-    protected void setSupportToolbar(@NonNull Toolbar toolbar) {
+    /*protected void setSupportToolbar(@NonNull Toolbar toolbar) {
         setSupportToolbar(toolbar, true, true);
     }
     protected void setSupportToolbar(@NonNull Toolbar toolbar, boolean showTitle, boolean showHome) {
@@ -131,6 +134,6 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel> : DaggerAppC
             getSupportActionBar().setDisplayHomeAsUpEnabled(showHome);
         }
 
-    }
+    }*/
 }
 

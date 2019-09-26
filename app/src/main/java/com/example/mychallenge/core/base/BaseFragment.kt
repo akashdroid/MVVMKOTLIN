@@ -6,13 +6,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
+import androidx.annotation.NonNull
+import androidx.annotation.Nullable
+import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import dagger.android.support.AndroidSupportInjection
 import dagger.android.support.DaggerFragment
 
 abstract class BaseFragment<T : ViewDataBinding, V : BaseViewModel> : DaggerFragment() {
 
-    var baseActivity: BaseActivity? = null
+    lateinit var  baseActivity: BaseActivity
         private set
     private var mRootView: View? = null
     var viewDataBinding: T? = null
@@ -42,7 +45,7 @@ abstract class BaseFragment<T : ViewDataBinding, V : BaseViewModel> : DaggerFrag
     val isNetworkConnected: Boolean
         get() = baseActivity != null && baseActivity!!.isNetworkConnected()
 
-    fun onAttach(context: Context) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is BaseActivity) {
             this.baseActivity = context
@@ -50,14 +53,14 @@ abstract class BaseFragment<T : ViewDataBinding, V : BaseViewModel> : DaggerFrag
         }
     }
 
-    fun onCreate(@Nullable savedInstanceState: Bundle) {
+    override fun onCreate(@Nullable savedInstanceState: Bundle) {
         performDependencyInjection()
         super.onCreate(savedInstanceState)
         mViewModel = viewModel
         setHasOptionsMenu(false)
     }
 
-    fun onCreateView(
+    override fun onCreateView(
         @NonNull inflater: LayoutInflater, container: ViewGroup,
         savedInstanceState: Bundle
     ): View? {
@@ -66,12 +69,13 @@ abstract class BaseFragment<T : ViewDataBinding, V : BaseViewModel> : DaggerFrag
         return mRootView
     }
 
-    fun onDetach() {
+    override fun onDetach() {
         baseActivity = null
         super.onDetach()
     }
 
-    fun onViewCreated(@NonNull view: View, savedInstanceState: Bundle) {
+
+    override fun onViewCreated(@NonNull view: View, savedInstanceState: Bundle) {
         super.onViewCreated(view, savedInstanceState)
         viewDataBinding!!.setVariable(bindingVariable, mViewModel)
         viewDataBinding!!.executePendingBindings()

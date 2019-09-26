@@ -2,6 +2,7 @@ package com.example.mychallenge
 
 import android.app.Activity
 import android.app.Application
+import com.androidnetworking.AndroidNetworking
 
 
 import javax.inject.Inject
@@ -35,7 +36,7 @@ class MvvmApp : Application(), HasActivityInjector {
 
         AndroidNetworking.initialize(applicationContext)
         if (BuildConfig.DEBUG) {
-            Netw.enableLogging(HttpLoggingInterceptor.Level.BODY)
+            AndroidNetworking.enableLogging(HttpLoggingInterceptor.Level.BODY)
         }
 
         CalligraphyConfig.initDefault(mCalligraphyConfig)

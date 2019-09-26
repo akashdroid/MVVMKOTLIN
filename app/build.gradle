@@ -53,6 +53,7 @@ ext {
     runnerVersion = '1.0.1'
     trelloLifecycleVersion = '2.2.1'
     calligraphyVersion = '2.2.0'
+    rx2FastAndroidNetworking = '1.0.1'
 
 
 }
@@ -90,6 +91,7 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
     implementation "com.squareup.retrofit2:converter-gson:$retrofitAdaptersVersion"
     implementation "com.squareup.retrofit2:adapter-rxjava:$retrofitAdaptersVersion"
+    implementation "com.amitshekhar.android:rx2-android-networking:$rx2FastAndroidNetworking"
 
     //Views and animations
     implementation "com.facebook.fresco:fresco:$frescoVersion"
