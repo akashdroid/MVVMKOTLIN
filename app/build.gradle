@@ -54,7 +54,7 @@ ext {
     trelloLifecycleVersion = '2.2.1'
     calligraphyVersion = '2.2.0'
     rx2FastAndroidNetworking = '1.0.1'
-
+    timberVersion = '4.5.1'
 
 }
 
@@ -108,7 +108,8 @@ dependencies {
     //HyperLog
     implementation 'com.hypertrack:hyperlog:0.0.9'
 
-    //Google Authentication
+    // logger
+    implementation "com.jakewharton.timber:timber:$timberVersion"
 
     //MultiDex
     implementation "com.android.support:multidex:$multiDexVersion"

@@ -1,21 +1,24 @@
 package com.example.mychallenge.core.base
 
 import android.content.Context
+
 import android.os.Bundle
+
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+
 import androidx.annotation.LayoutRes
-import androidx.annotation.NonNull
-import androidx.annotation.Nullable
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
+
+import dagger.android.DaggerFragment
 import dagger.android.support.AndroidSupportInjection
-import dagger.android.support.DaggerFragment
 
-abstract class BaseFragment<T : ViewDataBinding, V : BaseViewModel> : DaggerFragment() {
 
-    lateinit var  baseActivity: BaseActivity
+abstract class BaseFragment<T : ViewDataBinding, V : BaseViewModel<*>> : DaggerFragment() {
+
+    var baseActivity: BaseActivity<*, *>? = null
         private set
     private var mRootView: View? = null
     var viewDataBinding: T? = null
@@ -43,17 +46,17 @@ abstract class BaseFragment<T : ViewDataBinding, V : BaseViewModel> : DaggerFrag
     abstract val viewModel: V
 
     val isNetworkConnected: Boolean
-        get() = baseActivity != null && baseActivity!!.isNetworkConnected()
+        get() = baseActivity != null && baseActivity!!.isNetworkConnected
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (context is BaseActivity) {
+        if (context is BaseActivity<*, *>) {
             this.baseActivity = context
             context.onFragmentAttached()
         }
     }
 
-    override fun onCreate(@Nullable savedInstanceState: Bundle) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         performDependencyInjection()
         super.onCreate(savedInstanceState)
         mViewModel = viewModel
@@ -61,11 +64,12 @@ abstract class BaseFragment<T : ViewDataBinding, V : BaseViewModel> : DaggerFrag
     }
 
     override fun onCreateView(
-        @NonNull inflater: LayoutInflater, container: ViewGroup,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle
     ): View? {
         viewDataBinding = DataBindingUtil.inflate(inflater, layoutId, container, false)
-        mRootView = viewDataBinding!!.getRoot()
+        mRootView = viewDataBinding!!.root
         return mRootView
     }
 
@@ -74,8 +78,7 @@ abstract class BaseFragment<T : ViewDataBinding, V : BaseViewModel> : DaggerFrag
         super.onDetach()
     }
 
-
-    override fun onViewCreated(@NonNull view: View, savedInstanceState: Bundle) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewDataBinding!!.setVariable(bindingVariable, mViewModel)
         viewDataBinding!!.executePendingBindings()

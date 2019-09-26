@@ -1,8 +1,8 @@
 package com.example.mychallenge.core.base
 
+
 import androidx.databinding.ObservableBoolean
 import androidx.lifecycle.ViewModel
-
 
 import com.example.mychallenge.core.rx.SchedulerProvider
 
@@ -12,6 +12,7 @@ import io.reactivex.disposables.CompositeDisposable
 
 
 abstract class BaseViewModel<N>(
+    val dataManager: DataManager,
     val schedulerProvider: SchedulerProvider
 ) : ViewModel() {
 
@@ -21,10 +22,10 @@ abstract class BaseViewModel<N>(
 
     private var mNavigator: WeakReference<N>? = null
 
-    var navigator: N?
-        get() = mNavigator!!.get()
+    var navigator: N
+        get() = mNavigator!!.get()!!
         set(navigator) {
-            this.mNavigator = WeakReference<N>(navigator)
+            this.mNavigator = WeakReference(navigator)
         }
 
     init {

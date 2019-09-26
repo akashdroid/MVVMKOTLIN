@@ -1,26 +1,30 @@
 package com.example.mychallenge.core.base
 
-import androidx.databinding.ViewDataBinding
-import dagger.android.support.DaggerAppCompatActivity
-
 import android.annotation.TargetApi
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.pm.PackageManager
+
 import android.os.Build
 import android.os.Bundle
+
+
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import androidx.annotation.LayoutRes
-import androidx.annotation.Nullable
-import androidx.databinding.DataBindingUtil
 
+
+import androidx.annotation.LayoutRes
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
+import com.example.mychallenge.core.CommonUtils
+import com.example.mychallenge.core.NetworkUtils
 
 import dagger.android.AndroidInjection
+import dagger.android.DaggerActivity
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
 
 
-abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel> : DaggerAppCompatActivity(),
+abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel<*>> : DaggerActivity(),
     BaseFragment.Callback {
 
     // TODO
@@ -52,21 +56,21 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel> : DaggerAppC
     abstract val viewModel: V
 
     val isNetworkConnected: Boolean
-        get() = NetworkUtils.isNetworkConnected(getApplicationContext())
+        get() = NetworkUtils.isNetworkConnected(applicationContext)
 
-    fun onFragmentAttached() {
-
-    }
-
-   override fun onFragmentDetached(tag: String) {
+    override fun onFragmentAttached() {
 
     }
 
-    protected override fun attachBaseContext(newBase: Context) {
+    override fun onFragmentDetached(tag: String) {
+
+    }
+
+    override fun attachBaseContext(newBase: Context) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase))
     }
 
-    protected override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         performDependencyInjection()
         super.onCreate(savedInstanceState)
         performDataBinding()
@@ -74,14 +78,14 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel> : DaggerAppC
 
     @TargetApi(Build.VERSION_CODES.M)
     fun hasPermission(permission: String): Boolean {
-        return Build.VERSION.SDK_INT < Build.VERSION_CODES.M || checkSelfPermission(permission) === PackageManager.PERMISSION_GRANTED
+        return Build.VERSION.SDK_INT < Build.VERSION_CODES.M || checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED
     }
 
     fun hideKeyboard() {
-        val view = this.getCurrentFocus()
+        val view = this.currentFocus
         if (view != null) {
             val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm?.hideSoftInputFromWindow(view!!.getWindowToken(), 0)
+            imm?.hideSoftInputFromWindow(view.windowToken, 0)
         }
     }
 

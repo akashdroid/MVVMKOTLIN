@@ -3,6 +3,7 @@ package com.example.mychallenge
 import android.app.Activity
 import android.app.Application
 import com.androidnetworking.AndroidNetworking
+import com.example.mychallenge.core.AppLogger
 
 
 import javax.inject.Inject
