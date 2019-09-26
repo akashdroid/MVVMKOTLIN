@@ -37,7 +37,7 @@ class MvvmApp : Application(), HasActivityInjector {
 
         AndroidNetworking.initialize(applicationContext)
         if (BuildConfig.DEBUG) {
-            AndroidNetworking.enableLogging(HttpLoggingInterceptor.Level.BODY)
+            //AndroidNetworking.enableLogging(HttpLoggingInterceptor.Level.BODY)
         }
 
         CalligraphyConfig.initDefault(mCalligraphyConfig)
